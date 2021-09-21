@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  syncthing:
+    image: ghcr.io/linuxserver/syncthing:${SYNCTHING_VERSION}
+    container_name: syncthing
+    hostname: ${HOSTNAME}
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ${SYNCTHING_CONFIG_PATH}:/config
+      - ${DEVICES_STORAGE_PATH}:/devices
+    ports:
+      - ${SYNCTHING_WEB_PORT}:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+
+  resilio-sync:
+    image: ghcr.io/linuxserver/resilio-sync:${RESILIO_SYNC_VERSION}
+    container_name: resilio-sync
+    hostname: ${HOSTNAME}
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ${RESILIO_CONFIG_PATH}:/config
+      - ${DEVICES_STORAGE_PATH}:/devices
+    ports:
+      - ${RESILIO_WEB_PORT}:8888
+      - 55555:55555
