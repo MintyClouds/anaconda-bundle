@@ -12,6 +12,7 @@ services:
     volumes:
       - ${SYNCTHING_CONFIG_PATH}:/config
       - ${DEVICES_STORAGE_PATH}:/devices
+      - ${MEDIA_STORAGE_PATH}:/media_data
     ports:
       - ${SYNCTHING_WEB_PORT}:8384
       - 22000:22000/tcp
