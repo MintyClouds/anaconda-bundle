@@ -34,3 +34,20 @@ services:
     ports:
       - ${RESILIO_WEB_PORT}:8888
       - 55555:55555
+
+  duplicacy:
+    image: 'saspus/duplicacy-web:${DUPLICACY_VERSION}'
+    container_name: duplicacy
+    ports:
+        - '${DUPLICACY_WEB_PORT}:3875/tcp'
+    environment:
+      - TZ=Europe/Moscow
+      - GRP_ID=1000
+      - USR_ID:1000
+    volumes:
+        - '${DUPLICACY_CONFIG_PATH}:/config'
+        - '${DUPLICACY_LOGS_PATH}:/logs'
+        - '${DUPLICACY_CACHE_PATH}/cache'
+        - '${DUPLICACY_RESTORE_PATH}:/backuproot'
+        - '${BACKUP_STORAGE_PATH}:/storage_test:ro'
+    
