@@ -38,6 +38,8 @@ services:
   duplicacy:
     image: 'saspus/duplicacy-web:${DUPLICACY_VERSION}'
     container_name: duplicacy
+    hostname: ${HOSTNAME}
+    restart: unless-stopped
     ports:
         - '${DUPLICACY_WEB_PORT}:3875/tcp'
     environment:
