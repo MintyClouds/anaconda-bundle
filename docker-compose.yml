@@ -61,7 +61,7 @@ services:
       - ${RCLONE_WEB_PORT}:5572
     volumes:
       - ${RCLONE_CONFIG_PATH}:/config/rclone
-      - ${RCLONE_LOGS}:/logs
+      - ${RCLONE_LOGS_PATH}:/logs
       - ${BACKUP_STORAGE_PATH}:/storage:ro
     environment:
       - PHP_TZ=Europe/Moscow
