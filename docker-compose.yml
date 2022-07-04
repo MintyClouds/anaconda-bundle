@@ -52,19 +52,17 @@ services:
         - '${DUPLICACY_CACHE_PATH}/cache'
         - '${DUPLICACY_RESTORE_PATH}:/backuproot'
         - '${BACKUP_STORAGE_PATH}:/storage:ro'
-  rclone:
-    image: rclone/rclone:${RCLONE_VERSION}
-    container_name: rclone
+  crontab_ui:
+    image: alseambusher/crontab-ui:${CRONTAB_UI_VERSION}
+    container_name: crontab_ui
     restart: unless-stopped
-    command: rcd --rc-web-gui --rc-addr :5572 --rc-user ${RCLONE_USER} --rc-pass ${RCLONE_PASSWORD}
     ports:
-      - ${RCLONE_WEB_PORT}:5572
+      - ${CRONTAB_UI_WEB_PORT}:8000
     volumes:
-      - ${RCLONE_CONFIG_PATH}:/config/rclone
-      - ${RCLONE_LOGS_PATH}:/logs
-      - ${BACKUP_STORAGE_PATH}:/storage:ro
+      - ${CRONTAB_UI_CONFIG_PATH}:/crontab-ui/crontabs/
+      - /etc/cron.d:/etc/crontabs
     environment:
-      - PHP_TZ=Europe/Moscow
-      - PUID=1000
-      - PGID=1000
+      - TZ=Europe/Moscow
+      - BASIC_AUTH_USER=${CRONTAB_UI_USER}
+      - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
     
