@@ -64,5 +64,5 @@ services:
       - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
     volumes:
       - ${CRONTAB_UI_DB_PATH}:${CRONTAB_UI_DB_PATH}
-      - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone.conf:ro
+      - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone/rclone.conf:ro
       - ${BACKUP_STORAGE_PATH}:${BACKUP_STORAGE_PATH}:ro
