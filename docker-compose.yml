@@ -65,6 +65,7 @@ services:
     volumes:
       - ${CRONTAB_UI_DB_PATH}:/crontab-ui/crontabs
       - ${CRONTAB_UI_LOGS_PATH}:/crontab-ui/crontabs/logs
+      - ${CRONTAB_UI_SUPERVISOR_LOGS_PATH}:/var/log
       - ${CRONTAB_UI_CRONS_PATH}:/etc/crontabs
       - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone/rclone.conf:ro
       - ${BACKUP_STORAGE_PATH}:${BACKUP_STORAGE_PATH}:ro
