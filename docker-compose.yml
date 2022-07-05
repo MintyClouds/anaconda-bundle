@@ -53,21 +53,14 @@ services:
         - '${DUPLICACY_RESTORE_PATH}:/backuproot'
         - '${BACKUP_STORAGE_PATH}:/storage:ro'
   crontab_ui:
-    image: alseambusher/crontab-ui:${CRONTAB_UI_VERSION}
+    image: ghcr.io/ephdtrg/crontab-ui-rclone:rclone
     container_name: crontab_ui
     restart: unless-stopped
     ports:
       - ${CRONTAB_UI_WEB_PORT}:8000
     volumes:
-      - ./crontab_ui_supervisord.conf:/etc/supervisord.conf
-      - /var/spool/cron/crontabs:/var/spool/cron/crontabs
       - ${CRONTAB_UI_DB_PATH}:${CRONTAB_UI_DB_PATH}
-     # - ${CRONTAB_UI_LOGS_PATH}:/var/log
     environment:
       - TZ=Europe/Moscow
       - BASIC_AUTH_USER=${CRONTAB_UI_USER}
       - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
-      - CRON_PATH=/var/spool/cron/crontabs
-      - CRON_DB_PATH=${CRONTAB_UI_DB_PATH}
-
-    
