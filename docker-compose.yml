@@ -52,9 +52,9 @@ services:
         - '${DUPLICACY_CACHE_PATH}/cache'
         - '${DUPLICACY_RESTORE_PATH}:/backuproot'
         - '${BACKUP_STORAGE_PATH}:/storage:ro'
-  crontab_ui:
+  crontab-ui:
     image: ghcr.io/ephdtrg/crontab-ui-rclone:rclone
-    container_name: crontab_ui
+    container_name: crontab-ui
     restart: unless-stopped
     ports:
       - ${CRONTAB_UI_WEB_PORT}:8000
