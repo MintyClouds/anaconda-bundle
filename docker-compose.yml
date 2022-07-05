@@ -59,10 +59,15 @@ services:
     ports:
       - ${CRONTAB_UI_WEB_PORT}:8000
     volumes:
-      - ${CRONTAB_UI_CONFIG_PATH}:/crontab-ui/crontabs/
-      - /etc/cron.d:/etc/crontabs
+      - ./crontab_ui_supervisord.conf:/etc/supervisord.conf
+      - /var/spool/cron/crontabs:/var/spool/cron/crontabs
+      - ${CRONTAB_UI_DB_PATH}:${CRONTAB_UI_DB_PATH}
+     # - ${CRONTAB_UI_LOGS_PATH}:/var/log
     environment:
       - TZ=Europe/Moscow
       - BASIC_AUTH_USER=${CRONTAB_UI_USER}
       - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
+      - CRON_PATH=/var/spool/cron/crontabs
+      - CRON_DB_PATH=${CRONTAB_UI_DB_PATH}
+
     
