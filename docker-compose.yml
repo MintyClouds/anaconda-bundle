@@ -60,8 +60,8 @@ services:
       - ${CRONTAB_UI_WEB_PORT}:8000
     environment:
       - TZ=Europe/Moscow
-      - BASIC_AUTH_USER=${CRONTAB_UI_USER}
-      - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
+      # - BASIC_AUTH_USER=${CRONTAB_UI_USER}
+      # - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
     volumes:
       - ${CRONTAB_UI_DB_PATH}:/crontab-ui/crontabs
       - ${CRONTAB_UI_LOGS_PATH}:/crontab-ui/crontabs/logs
