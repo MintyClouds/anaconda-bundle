@@ -92,6 +92,8 @@ services:
     image: nextcloud:${NEXTCLOUD_VERSION}
     restart: unless-stopped
     user: "${NEXTCLOUD_UID_GID}:${NEXTCLOUD_UID_GID}"
+    ports:
+      - ${NEXTCLOUD_PORT}:80
     depends_on:
       - nextcloud-db
       - nextcloud-redis
