@@ -63,6 +63,7 @@ services:
       # - BASIC_AUTH_USER=${CRONTAB_UI_USER}
       # - BASIC_AUTH_PWD=${CRONTAB_UI_PASSWORD}
     volumes:
+      - ./update_aliases.py:/srv/update_aliases.py
       - ${CRONTAB_UI_DB_PATH}:/crontab-ui/crontabs
       - ${CRONTAB_UI_LOGS_PATH}:/crontab-ui/crontabs/logs
       - ${CRONTAB_UI_SUPERVISOR_LOGS_PATH}:/var/log
