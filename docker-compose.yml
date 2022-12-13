@@ -35,23 +35,24 @@ services:
       - ${RESILIO_WEB_PORT}:8888
       - 55555:55555
 
-  duplicacy:
-    image: 'saspus/duplicacy-web:${DUPLICACY_VERSION}'
-    container_name: duplicacy
-    hostname: ${HOSTNAME}
-    restart: unless-stopped
-    ports:
-        - '${DUPLICACY_WEB_PORT}:3875/tcp'
-    environment:
-      - TZ=Europe/Moscow
-      - GRP_ID=1000
-      - USR_ID:1000
-    volumes:
-        - '${DUPLICACY_CONFIG_PATH}:/config'
-        - '${DUPLICACY_LOGS_PATH}:/logs'
-        - '${DUPLICACY_CACHE_PATH}/cache'
-        - '${DUPLICACY_RESTORE_PATH}:/backuproot'
-        - '${BACKUP_STORAGE_PATH}:/storage:ro'
+  # duplicacy:
+  #   image: 'saspus/duplicacy-web:${DUPLICACY_VERSION}'
+  #   container_name: duplicacy
+  #   hostname: ${HOSTNAME}
+  #   restart: unless-stopped
+  #   ports:
+  #       - '${DUPLICACY_WEB_PORT}:3875/tcp'
+  #   environment:
+  #     - TZ=Europe/Moscow
+  #     - GRP_ID=1000
+  #     - USR_ID:1000
+  #   volumes:
+  #       - '${DUPLICACY_CONFIG_PATH}:/config'
+  #       - '${DUPLICACY_LOGS_PATH}:/logs'
+  #       - '${DUPLICACY_CACHE_PATH}/cache'
+  #       - '${DUPLICACY_RESTORE_PATH}:/backuproot'
+  #       - '${BACKUP_STORAGE_PATH}:/storage:ro'
+
   crontab-ui:
     image: ghcr.io/ephdtrg/crontab-ui-rclone:rclone
     container_name: crontab-ui
@@ -70,4 +71,39 @@ services:
       - ${CRONTAB_UI_CRONS_PATH}:/etc/crontabs
       - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone/rclone.conf:ro
       - ${BACKUP_STORAGE_PATH}:${BACKUP_STORAGE_PATH}:ro
-      - ${UPDATE_ALIASES_PATH}:/srv/update_aliases.py
+
+  nextcloud-db:
+    restart: unless-stopped
+    image: postgres:${NEXTCLOUD_PG_VERSION}
+    environment:
+    - POSTGRES_USER=${NEXTCLOUD_PG_USER}
+    - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
+    - POSTGRES_DB=${NEXTCLOUD_PG_DB}
+    volumes:
+    - ${NEXTCLOUD_PG_CONFIG_PATH}:/var/lib/postgresql/data
+
+  nextcloud-redis:
+    image: redis:${NEXTCLOUD_REDIS_VERSION}
+    restart: unless-stopped
+    volumes:
+      - ${NEXTCLOUD_REDIS_CONFIG_PATH}:/var/lib/redis
+
+  nextcloud:
+    image: nextcloud:${NEXTCLOUD_VERSION}
+    restart: unless-stopped
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    environment:
+      - POSTGRES_USER=${NEXTCLOUD_PG_USER}
+      - POSTGRES_PASSWORD=${NEXTCLOUD_PG_PASSWORD}
+      - POSTGRES_DB=${NEXTCLOUD_PG_DB}
+      - POSTGRES_HOST=nextcloud-db
+      - REDIS_HOST=nextcloud-redis
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_DOMAIN}
+      - TRUSTED_PROXIES=172.18.0.0/16
+    volumes:
+      - ${NEXTCLOUD_CONFIG_PATH}/var/www/html
+      - ${NEXTCLOUD_EXT_STORAGE_PATH_1}:${NEXTCLOUD_EXT_STORAGE_DIR_1}
