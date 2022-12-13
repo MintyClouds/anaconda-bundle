@@ -71,6 +71,7 @@ services:
       - ${CRONTAB_UI_CRONS_PATH}:/etc/crontabs
       - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone/rclone.conf:ro
       - ${BACKUP_STORAGE_PATH}:${BACKUP_STORAGE_PATH}:ro
+      - ${UPDATE_ALIASES_PATH}:/srv/update_aliases.py
 
   nextcloud-db:
     restart: unless-stopped
