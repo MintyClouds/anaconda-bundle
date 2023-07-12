@@ -95,7 +95,10 @@ services:
       - ${NEXTCLOUD_REDIS_CONFIG_PATH}:/var/lib/redis
 
   nextcloud:
-    image: nextcloud:${NEXTCLOUD_VERSION}
+          # image: nextcloud:${NEXTCLOUD_VERSION}
+    build:
+      context: .
+      dockerfile: dockerfiles/nextcloud.Dockerfile
     restart: unless-stopped
     user: "${NEXTCLOUD_UID_GID}:${NEXTCLOUD_UID_GID}"
     ports:
@@ -115,7 +118,11 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
       - NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_DOMAIN}
       - TRUSTED_PROXIES=172.18.0.0/16
+      - PHP_MEMORY_LIMIT=1024M
     volumes:
       - "./redis-session.ini:/usr/local/etc/php/conf.d/redis-session.ini"
+      - "./memories-main.js:/var/www/html/custom_apps/memories/js/memories-main.js:ro"
       - ${NEXTCLOUD_CONFIG_PATH}:/var/www/html
-      - ${NEXTCLOUD_EXT_STORAGE_PATH_1}:${NEXTCLOUD_EXT_STORAGE_DIR_1}
+      - ${NEXTCLOUD_TEMP_PATH}:/var/www/memories_tmp
+      - ${NEXTCLOUD_GALLERY_STORAGE_PATH}:${NEXTCLOUD_GALLERY_STORAGE_PATH}
+      - ${NEXTCLOUD_DEVICES_STORAGE_PATH}:${NEXTCLOUD_DEVICES_STORAGE_PATH}
