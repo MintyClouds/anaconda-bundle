@@ -54,7 +54,7 @@ services:
   #       - '${BACKUP_STORAGE_PATH}:/storage:ro'
 
   crontab-ui:
-    image: ghcr.io/ephdtrg/crontab-ui-rclone:rclone
+    image: ghcr.io/ephdtrg/crontab-ui-backup:autorestic
     container_name: crontab-ui
     restart: unless-stopped
     ports:
@@ -68,7 +68,7 @@ services:
       - ${CRONTAB_UI_LOGS_PATH}:/crontab-ui/crontabs/logs
       - ${CRONTAB_UI_SUPERVISOR_LOGS_PATH}:/var/log
       - ${CRONTAB_UI_CRONS_PATH}:/etc/crontabs
-      - ${CRONTAB_UI_RCLONE_CONFIG}:/root/.config/rclone/rclone.conf:ro
+      - ${CRONTAB_UI_AUTORESTIC_CONFIG}:/root/.autorestic.yml:ro
       - ${BACKUP_STORAGE_PATH}:${BACKUP_STORAGE_PATH}:ro
       - ${UPDATE_ALIASES_PATH}:/srv/update_aliases.py
 
